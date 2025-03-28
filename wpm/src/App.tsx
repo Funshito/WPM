@@ -115,6 +115,9 @@ function App() {
   const [wrong, setWrong] = useState(0);
   const [total, setTotal] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [totalKeystroke, setTotalKeystroke] = useState(0);
+  // const [correctKeystroke, setCorrectKeystroke] = useState(0);
+  const [wrongKeystroke, setWrongKeystroke] = useState(0);
   // const [wordText, setWordText] = useState();
 
   // getting radom words from array
@@ -164,13 +167,17 @@ function App() {
   //   if (selectedWords.includes(nword))
   //     alert("Congratulations, you found a match!");
   // };
+  
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    setTotalKeystroke((prevCount) => prevCount + 1);
     if (event.key === " ") {
       if (words.includes(nword)) {
         setCorrect((prevCorrect) => prevCorrect + 1);
         setNword("");
-      } else {
+      } else if(event.key === "backspace"){
+        setWrongKeystroke((prevWrong) => prevWrong + 1);
+      }else {
         setWrong((prevWrong) => prevWrong + 1);
       }
       setNword("");
@@ -181,6 +188,18 @@ function App() {
       // }
     }
   };
+
+  // const handleCorrectKeystrokeCapture = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === " ") {
+  //     setCorrectKeystroke((prevCorrect) => prevCorrect + 1);
+  //   }
+  // };
+
+  // const handleKeyBackSpace = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === "Backspace" && nword.length > 0) {
+  //     setWrongKeystroke((prevWrong) => prevWrong + 1);
+  //   }
+  // };
 
   const HandleClearText = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -220,6 +239,8 @@ function App() {
                 value={nword}
                 onChange={(e) => setNword(e.target.value)}
                 onKeyDown={handleKeyDown}
+                // onKeyDown={handleKeyBackSpace}
+                // onKeyDown={handleCorrectKeystrokeCapture}
                 disabled={isDisabled}
                 style={{
                   display: "block",
@@ -309,9 +330,9 @@ function App() {
                   fontWeight: "600",
                 }}
               >
-                {total}/
+                {totalKeystroke}/
                 <span style={{color: 'pink'}}>
-                  {wrong}
+                  {wrongKeystroke}
                 </span>
               </span>
             </p>
